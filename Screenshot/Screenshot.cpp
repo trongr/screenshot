@@ -111,6 +111,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
+   // TODO. main
+   Screengrab::CaptureImagesOnInterval(hWnd);
+   //Screengrab::CaptureAnImage(hWnd, L"myscreenshot.bmp");
+
    return TRUE;
 }
 
@@ -151,8 +155,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 		// TODO: Add any drawing code here...
-
-        Screengrab::CaptureAnImage(hWnd);
 
 		EndPaint(hWnd, &ps);
 		break;

@@ -1,6 +1,7 @@
 #include "stdafx.h"
+#include <sstream>
 #include "Screengrab.h"
-
+#include "Utils.h"
 
 Screengrab::Screengrab()
 {
@@ -28,7 +29,7 @@ Screengrab::~Screengrab()
 //      Note: This sample will attempt to create a file called captureqwsx.bmp 
 //        
 
-int Screengrab::CaptureAnImage(HWND hWnd)
+int Screengrab::CaptureAnImage(HWND hWnd, std::wstring imageFilename)
 {
     HDC hdcScreen;
     HDC hdcWindow;
@@ -129,7 +130,7 @@ int Screengrab::CaptureAnImage(HWND hWnd)
         (BITMAPINFO *)&bi, DIB_RGB_COLORS);
 
     // A file is created, this is where we will save the screen capture.
-    HANDLE hFile = CreateFile(L"captureqwsx.bmp",
+    HANDLE hFile = CreateFile(imageFilename.c_str(),
         GENERIC_WRITE,
         0,
         NULL,
@@ -168,4 +169,21 @@ done:
     ReleaseDC(hWnd, hdcWindow);
 
     return 0;
+}
+
+int Screengrab::CaptureImagesOnInterval(HWND hWnd){
+    std::wstring baseFilename = L"tmp/myscreenshot.";
+    int i = 0;
+    while (true){
+        std::wstringstream stringStream;
+        stringStream << baseFilename << i << ".bmp";
+        std::wstring imageFilename = stringStream.str();
+
+        CaptureAnImage(hWnd, imageFilename);
+
+        Utils::log(imageFilename);
+
+        i++;
+        Sleep(1 * 1000);
+    }
 }
